@@ -9,6 +9,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
@@ -18,15 +22,19 @@ import java.sql.SQLException;
 @Configuration
 @EnableJpaRepositories("com.sample.chatbackend.repository")
 @EnableTransactionManagement
-public class DatabaseConfiguration {
+@EnableWebMvc
+public class ChatConfiguration implements WebMvcConfigurer {
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(ChatConfiguration.class);
 
     private final Environment env;
 
-    public DatabaseConfiguration(Environment env) {
+    public ChatConfiguration(Environment env) {
         this.env = env;
     }
 
-
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**");
+    }
 }

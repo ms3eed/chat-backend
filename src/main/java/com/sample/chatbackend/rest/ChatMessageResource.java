@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ public class ChatMessageResource {
     @PostMapping("/chat-messages")
     public ResponseEntity<ChatMessage> createChatMessage(@Valid @RequestBody ChatMessage chatMessage) throws URISyntaxException {
         log.debug("REST request to save ChatMessage : {}", chatMessage);
+        chatMessage.setCreatedAt(ZonedDateTime.now());
         ChatMessage result = chatMessageService.save(chatMessage);
         return ResponseEntity.created(new URI("/api/chat-messages/" + result.getId()))
             .body(result);
